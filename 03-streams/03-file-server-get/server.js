@@ -23,10 +23,10 @@ server.on('request', (req, res) => {
       fs.createReadStream(filepath)
         .on('error', (e) => {
           if (e.code === 'ENOENT') {
-            res.statusCode = 400;
+            res.statusCode = 404;
             res.end('File is not found');
           } else {
-            res.statusCode = 404;
+            res.statusCode = 500;
             res.end('Internal server error');
           }
         })
