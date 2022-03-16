@@ -20,17 +20,22 @@ server.on('request', (req, res) => {
 
   switch (req.method) {
     case 'GET':
-      fs.createReadStream(filepath)
-        .on('error', (e) => {
-          if (e.code === 'ENOENT') {
-            res.statusCode = 404;
-            res.end('File is not found');
-          } else {
-            res.statusCode = 500;
-            res.end('Internal server error');
-          }
-        })
-        .pipe(res);
+      const stream = fs.createReadStream(filepath);
+      stream.pipe(res);
+
+      stream.on('error', (e) => {
+        if (e.code === 'ENOENT') {
+          res.statusCode = 404;
+          res.end('File is not found');
+        } else {
+          res.statusCode = 500;
+          res.end('Internal server error');
+        }
+      });
+
+      req.on('abort', () => {
+        stream.destroy();
+      });
       break;
 
     default:
