@@ -2,7 +2,6 @@ const url = require('url');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
 
 const server = new http.Server();
 
@@ -23,7 +22,7 @@ server.on('request', (req, res) => {
       const stream = fs.createReadStream(filepath);
       stream.pipe(res);
 
-      stream.on('error', (e) => {
+      stream.once('error', (e) => {
         if (e.code === 'ENOENT') {
           res.statusCode = 404;
           res.end('File is not found');
@@ -33,7 +32,7 @@ server.on('request', (req, res) => {
         }
       });
 
-      req.on('abort', () => {
+      req.once('abort', () => {
         stream.destroy();
       });
       break;
