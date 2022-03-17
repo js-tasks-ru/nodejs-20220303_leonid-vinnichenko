@@ -1,5 +1,5 @@
-const stream = require("stream");
-const os = require("os");
+const stream = require('stream');
+const os = require('os');
 
 class LineSplitStream extends stream.Transform {
   constructor(options) {
@@ -16,8 +16,8 @@ class LineSplitStream extends stream.Transform {
       if (char !== os.EOL) {
         this.accum.push(char);
       } else {
-        const line = this.accum.join("");
-        this.accum.length = 0;
+        const line = this.accum.join('');
+        this.accum = [];
         this.push(line);
       }
     }
@@ -25,7 +25,7 @@ class LineSplitStream extends stream.Transform {
   }
 
   _flush(cb) {
-    cb(null, this.accum.join(""));
+    cb(null, this.accum.join(''));
     this.accum = null;
   }
 }
