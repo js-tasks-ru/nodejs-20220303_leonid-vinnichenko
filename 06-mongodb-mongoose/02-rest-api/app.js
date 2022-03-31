@@ -1,7 +1,12 @@
 const Koa = require('koa');
 const Router = require('koa-router');
-const {productsBySubcategory, productList, productById} = require('./controllers/products');
-const {categoryList} = require('./controllers/categories');
+const {
+  productsBySubcategory,
+  productList,
+  productById,
+} = require('./controllers/products');
+const { categoryList } = require('./controllers/categories');
+const { validateObjectId } = require('./libs/util');
 
 const app = new Koa();
 
@@ -11,20 +16,20 @@ app.use(async (ctx, next) => {
   } catch (err) {
     if (err.status) {
       ctx.status = err.status;
-      ctx.body = {error: err.message};
+      ctx.body = { error: err.message };
     } else {
       console.error(err);
       ctx.status = 500;
-      ctx.body = {error: 'Internal server error'};
+      ctx.body = { error: 'Internal server error' };
     }
   }
 });
 
-const router = new Router({prefix: '/api'});
+const router = new Router({ prefix: '/api' });
 
 router.get('/categories', categoryList);
 router.get('/products', productsBySubcategory, productList);
-router.get('/products/:id', productById);
+router.get('/products/:id', validateObjectId, productById);
 
 app.use(router.routes());
 
