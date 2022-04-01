@@ -1,8 +1,10 @@
-const { mongoSerialize } = require('../libs/util');
 const Category = require('../models/Category');
+const mapCategory = require('../mappers/category');
 
 module.exports.categoryList = async function categoryList(ctx) {
   const categories = await Category.find({});
 
-  ctx.body = mongoSerialize({ categories });
+  ctx.body = {
+    categories: categories.map((c) => mapCategory(c)),
+  };
 };

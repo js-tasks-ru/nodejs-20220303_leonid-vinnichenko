@@ -6,7 +6,7 @@ const {
   productById,
 } = require('./controllers/products');
 const { categoryList } = require('./controllers/categories');
-const { validateObjectId } = require('./libs/util');
+const { validateObjectId } = require('./libs/middleware');
 
 const app = new Koa();
 

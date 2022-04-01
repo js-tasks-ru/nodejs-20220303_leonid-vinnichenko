@@ -1,6 +1,6 @@
 const mongose = require('mongoose');
-const { mongoSerialize } = require('../libs/util');
 const Product = require('../models/Product');
+const mapProduct = require('../mappers/product');
 
 module.exports.productsBySubcategory = async function productsBySubcategory(
   ctx,
@@ -18,13 +18,13 @@ module.exports.productsBySubcategory = async function productsBySubcategory(
 
   const products = await Product.find({ subcategory });
 
-  ctx.body = mongoSerialize({ products });
+  ctx.body = { products: products.map((p) => mapProduct(p)) };
 };
 
 module.exports.productList = async function productList(ctx) {
   const products = await Product.find({});
 
-  ctx.body = mongoSerialize({ products });
+  ctx.body = { products: products.map((p) => mapProduct(p)) };
 };
 
 module.exports.productById = async function productById(ctx) {
@@ -36,5 +36,5 @@ module.exports.productById = async function productById(ctx) {
     return;
   }
 
-  ctx.body = mongoSerialize({ product });
+  ctx.body = { product: mapProduct(product) };
 };
