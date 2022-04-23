@@ -1,11 +1,16 @@
+if (process.env.NODE_ENV !== 'test') {
+  require('dotenv').config();
+}
+
 module.exports = {
   mongodb: {
-    uri: (process.env.NODE_ENV === 'test') ?
-      'mongodb://localhost/7-module-3-task' :
-      'mongodb://localhost/any-shop',
+    uri:
+      process.env.NODE_ENV === 'test'
+        ? 'mongodb://localhost/7-module-3-task'
+        : 'mongodb://localhost/any-shop',
   },
   crypto: {
-    iterations: (process.env.NODE_ENV === 'test' ? 1 : 12000),
+    iterations: process.env.NODE_ENV === 'test' ? 1 : 12000,
     length: 128,
     digest: 'sha512',
   },
